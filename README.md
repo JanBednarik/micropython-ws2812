@@ -1,5 +1,5 @@
-MicroPython WS2812
-==================
+MicroPython WS2812 driver
+=========================
 
 MicroPython driver for WS2812, WS2812B, and compatible RGB LEDs. These are
 popular RGB LEDs used for example in AdaFruit NeoPixels rings, stripes, boards,
@@ -21,7 +21,7 @@ power and ground wires to VIN and GND on pyboard. The same applies for LED
 rings, stripes, etc. (they have always one input wire).
 
 Note: USB may be insufficient for powering lots of RGB LEDs. You may need to
-youse additional power source.
+use additional power source.
 
 Usage
 -----
