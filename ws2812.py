@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import gc
 import pyb
 
@@ -5,16 +7,20 @@ import pyb
 class WS2812:
     """
     Driver for WS2812 RGB LEDs. May be used for controlling single LED or chain
-    of LEDs. Example of use:
+    of LEDs.
 
-    chain = WS2812(spi_bus=1, led_count=4)
-    data = [
-        (255, 0, 0),    # red
-        (0, 255, 0),    # green
-        (0, 0, 255),    # blue
-        (85, 85, 85),   # white
-    ]
-    chain.show(data)
+    Example of use:
+
+        chain = WS2812(spi_bus=1, led_count=4)
+        data = [
+            (255, 0, 0),    # red
+            (0, 255, 0),    # green
+            (0, 0, 255),    # blue
+            (85, 85, 85),   # white
+        ]
+        chain.show(data)
+
+    Version: 1.0
     """
     buf_bytes = (0x11, 0x13, 0x31, 0x33)
 
@@ -42,8 +48,8 @@ class WS2812:
 
     def show(self, data):
         """
-        Sends RGB data. Expected data = [(R, G, B), ...] where R, G and B are
-        intensities of colors in range from 0 to 255. One RGB tuple for each
+        Show RGB data on LEDs. Expected data = [(R, G, B), ...] where R, G and B
+        are intensities of colors in range from 0 to 255. One RGB tuple for each
         LED. Count of tuples may be less than count of connected LEDs.
         """
         self.fill_buf(data)
@@ -51,7 +57,7 @@ class WS2812:
 
     def send_buf(self):
         """
-        Sends buffer over SPI.
+        Send buffer over SPI.
         """
         if self.disable_irq:
             pyb.disable_irq()
@@ -63,7 +69,7 @@ class WS2812:
 
     def fill_buf(self, data):
         """
-        Fills buffer with bytes.
+        Fill buffer with bytes.
         """
         i = 0
         for byte in self.data_to_bytes(data):
@@ -76,7 +82,7 @@ class WS2812:
 
     def data_to_bytes(self, data):
         """
-        Converts data to bytes. Note: Order of colors is changed from RGB to GRB
+        Convert data to bytes. Note: Order of colors is changed from RGB to GRB
         because WS2812 LED has GRB order of colors.
         """
         for red, green, blue in data:

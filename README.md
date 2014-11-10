@@ -5,23 +5,10 @@ MicroPython driver for WS2812, WS2812B, and compatible RGB LEDs. These are
 popular RGB LEDs used for example in AdaFruit NeoPixels rings, stripes, boards,
 etc.
 
-You can check more about the microPython project here: http://micropython.org
-
 Installation
 ------------
 
 Copy `ws2812.py` file to your pyboard.
-
-Wiring
-------
-
-WS2812 driver is using SPI bus. Connect your LED's input wire to the SPI bus 1
-MOSI (pin X8 on pyboard) or SPI bus 2 MOSI (pin Y8 on pyboard). Connect LED's
-power and ground wires to VIN and GND on pyboard. The same applies for LED
-rings, stripes, etc. (they have always one input wire).
-
-Note: USB may be insufficient for powering lots of RGB LEDs. You may need to
-use additional power source.
 
 Usage
 -----
@@ -44,3 +31,20 @@ bus 1 then just copy `example_simple.py` or `example_advanced.py` as `main.py`
 to your pyboard and reset your pyboard.
 
 Here is a video of `example_advanced.py` in action: http://youtu.be/ADYxiG40UJ0
+
+Wiring
+------
+
+WS2812 driver is using SPI bus. Connect your LED's input wire to the SPI bus 1
+MOSI (pin X8 on pyboard) or SPI bus 2 MOSI (pin Y8 on pyboard). Connect LED's
+power and ground wires to VIN and GND on pyboard. The same applies for LED
+rings, stripes, etc. (they have always one input wire).
+
+USB may be insufficient for powering lots of RGB LEDs. You may need to use
+additional power source.
+
+More info & Help
+----------------
+
+You can check more about the MicroPython project here: http://micropython.org
+Discussion about this driver: http://forum.micropython.org/viewtopic.php?f=5&t=394
