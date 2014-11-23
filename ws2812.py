@@ -69,35 +69,46 @@ class WS2812:
 
     def fill_buf(self, data):
         """
-        Fill buffer with bytes.
-        """
-        i = 0
-        for byte in self.data_to_bytes(data):
-            self.buf[i] = byte
-            i += 1
-        # turn off the rest of the LEDs
-        while i < self.buf_length:
-            self.buf[i] = self.buf_bytes[0]
-            i += 1
+        Fill buffer with RGB data.
 
-    def data_to_bytes(self, data):
+        Order of colors in buffer is changed from RGB to GRB because WS2812 LED
+        has GRB order of colors. Each color is represented by 4 bytes in buffer
+        (1 byte for each 2 bits).
+
+        Note: If you find this function ugly, it's because speed optimisations
+        beated purity of code.
         """
-        Convert data to bytes. Note: Order of colors is changed from RGB to GRB
-        because WS2812 LED has GRB order of colors.
-        """
+        buf = self.buf
+        buf_bytes = self.buf_bytes
+        buf_length = self.buf_length
+        intensity = self.intensity
+
+        mask = 0x03
+        index = 0
         for red, green, blue in data:
-            for byte in self.color_to_bytes(green):
-                yield byte
-            for byte in self.color_to_bytes(red):
-                yield byte
-            for byte in self.color_to_bytes(blue):
-                yield byte
+            red = int(red * intensity)
+            green = int(green * intensity)
+            blue = int(blue * intensity)
 
-    def color_to_bytes(self, color):
-        """
-        Yields 4 buffer bytes representing color value (1 byte for each 2 bits).
-        """
-        color = int(color * self.intensity)
-        for i in range(4):
-            yield self.buf_bytes[(color & 0xC0) >> 6]
-            color <<= 2
+            buf[index] = buf_bytes[green >> 6 & mask]
+            buf[index+1] = buf_bytes[green >> 4 & mask]
+            buf[index+2] = buf_bytes[green >> 2 & mask]
+            buf[index+3] = buf_bytes[green & mask]
+
+            buf[index+4] = buf_bytes[red >> 6 & mask]
+            buf[index+5] = buf_bytes[red >> 4 & mask]
+            buf[index+6] = buf_bytes[red >> 2 & mask]
+            buf[index+7] = buf_bytes[red & mask]
+
+            buf[index+8] = buf_bytes[blue >> 6 & mask]
+            buf[index+9] = buf_bytes[blue >> 4 & mask]
+            buf[index+10] = buf_bytes[blue >> 2 & mask]
+            buf[index+11] = buf_bytes[blue & mask]
+
+            index += 12
+
+        # turn off the rest of the LEDs
+        off = buf_bytes[0]
+        while index < buf_length:
+            buf[index] = off
+            index += 1
