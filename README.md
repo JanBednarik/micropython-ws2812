@@ -2,8 +2,11 @@ MicroPython WS2812 driver
 =========================
 
 MicroPython driver for WS2812, WS2812B, and compatible RGB LEDs. These are
-popular RGB LEDs used for example in AdaFruit NeoPixels rings, stripes, boards,
+popular RGB LEDs used for example in AdaFruit NeoPixels rings, strips, boards,
 etc.
+
+Driver has been tested with up to 240 LEDs (4m of NeoPixels stripe) but it
+should work with much more LEDs.
 
 Installation
 ------------
@@ -30,7 +33,10 @@ NeoPixels ring (or similar) with 16 RGB LEDs. If you have it connected to SPI
 bus 1 then just copy `example_simple.py` or `example_advanced.py` as `main.py`
 to your pyboard and reset your pyboard.
 
-Here is a video of `example_advanced.py` in action: http://youtu.be/ADYxiG40UJ0
+Video of `example_advanced.py` in action: http://youtu.be/ADYxiG40UJ0
+
+`example_240_leds.py` are some animations for 4 meters of NeoPixels strip with
+240 RGB LEDs. In action video: http://youtu.be/vb5l3h1-TqA
 
 Wiring
 ------
