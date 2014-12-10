@@ -55,3 +55,11 @@ More info & Help
 You can check more about the MicroPython project here: http://micropython.org
 
 Discussion about this driver: http://forum.micropython.org/viewtopic.php?f=5&t=394
+
+Changelog
+---------
+
+* 1.2 - Disable IRQ feature removed. (It's not neccesary in newer versions of
+  MicroPython.)
+* 1.1 - Speed optimisations.
+* 1.0 - First release.

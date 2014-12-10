@@ -24,17 +24,15 @@ class WS2812:
     """
     buf_bytes = (0x11, 0x13, 0x31, 0x33)
 
-    def __init__(self, spi_bus=1, led_count=1, intensity=1, disable_irq=True):
+    def __init__(self, spi_bus=1, led_count=1, intensity=1):
         """
         Params:
         * spi_bus = SPI bus ID (1 or 2)
         * led_count = count of LEDs
         * intensity = light intensity (float up to 1)
-        * disable_irq = disable IRQ while sending data over SPI
         """
         self.led_count = led_count
         self.intensity = intensity
-        self.disable_irq = disable_irq
 
         # prepare SPI data buffer (4 bytes for each color)
         self.buf_length = self.led_count * 3 * 4
@@ -53,18 +51,7 @@ class WS2812:
         LED. Count of tuples may be less than count of connected LEDs.
         """
         self.fill_buf(data)
-        self.send_buf()
-
-    def send_buf(self):
-        """
-        Send buffer over SPI.
-        """
-        if self.disable_irq:
-            pyb.disable_irq()
-            self.spi.send(self.buf)
-            pyb.enable_irq()
-        else:
-            self.spi.send(self.buf)
+        self.spi.send(self.buf)
         gc.collect()
 
     def fill_buf(self, data):
