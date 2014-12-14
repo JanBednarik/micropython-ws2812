@@ -51,14 +51,14 @@ class WS2812:
         LED. Count of tuples may be less than count of connected LEDs.
         """
         self.fill_buf(data)
-        self.spi.send(self.buf)
-        gc.collect()
+        self.send_buf()
 
     def send_buf(self):
         """
         Send buffer over SPI.
         """
         self.spi.send(self.buf)
+        gc.collect()
 
     def update_buf(self, data, start=0):
         """
@@ -76,7 +76,6 @@ class WS2812:
 
         buf = self.buf
         buf_bytes = self.buf_bytes
-        buf_length = self.buf_length
         intensity = self.intensity
 
         mask = 0x03
