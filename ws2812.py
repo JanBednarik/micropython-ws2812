@@ -54,24 +54,33 @@ class WS2812:
         self.spi.send(self.buf)
         gc.collect()
 
-    def fill_buf(self, data):
+    def send_buf(self):
         """
-        Fill buffer with RGB data.
+        Send buffer over SPI.
+        """
+        self.spi.send(self.buf)
+
+    def update_buf(self, data, start=0):
+        """
+        Fill a part of the buffer with RGB data.
 
         Order of colors in buffer is changed from RGB to GRB because WS2812 LED
         has GRB order of colors. Each color is represented by 4 bytes in buffer
         (1 byte for each 2 bits).
 
+        Returns the index of the first unfilled LED
+
         Note: If you find this function ugly, it's because speed optimisations
         beated purity of code.
         """
+
         buf = self.buf
         buf_bytes = self.buf_bytes
         buf_length = self.buf_length
         intensity = self.intensity
 
         mask = 0x03
-        index = 0
+        index = start * 12
         for red, green, blue in data:
             red = int(red * intensity)
             green = int(green * intensity)
@@ -94,8 +103,19 @@ class WS2812:
 
             index += 12
 
+        return index // 12
+
+    def fill_buf(self, data):
+        """
+        Fill buffer with RGB data.
+
+        All LEDs after the data are turned off.
+        """
+        end = self.update_buf(data)
+
         # turn off the rest of the LEDs
-        off = buf_bytes[0]
-        while index < buf_length:
+        buf = self.buf
+        off = self.buf_bytes[0]
+        for index in range(end * 12, self.buf_length):
             buf[index] = off
             index += 1
