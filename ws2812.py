@@ -22,7 +22,7 @@ class WS2812:
 
     Version: 1.0
     """
-    buf_bytes = (0x11, 0x13, 0x31, 0x33)
+    buf_bytes = (0x88, 0x8e, 0xe8, 0xee)
 
     def __init__(self, spi_bus=1, led_count=1, intensity=1):
         """
