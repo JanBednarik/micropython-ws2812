@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pyb
+try:
+    import pyb
+except ImportError:
+    import machine as pyb
+
 import math
 
 from ws2812 import WS2812

@@ -5,7 +5,10 @@ This example shows some animations on 4 meters of NeoPixels strip with 240 LEDs.
 """
 
 
-import pyb
+try:
+    import pyb
+except ImportError:
+    import machine as pyb
 import math
 
 from ws2812 import WS2812

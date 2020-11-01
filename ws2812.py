@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import gc
-import pyb
+try:
+    import pyb
+except ImportError:
+    import machine as pyb
 
 
 class WS2812:
