@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# https://github.com/JanBednarik/micropython-ws2812
 
 import gc
 try:
@@ -23,7 +24,7 @@ class WS2812:
         ]
         chain.show(data)
 
-    Version: 1.0
+    Version: 1.1
     """
     buf_bytes = (0x88, 0x8e, 0xe8, 0xee)
 
@@ -36,16 +37,36 @@ class WS2812:
         """
         self.led_count = led_count
         self.intensity = intensity
+        self._rgblist = [(0,0,0)]*self.led_count
 
         # prepare SPI data buffer (4 bytes for each color)
         self.buf_length = self.led_count * 3 * 4
         self.buf = bytearray(self.buf_length)
 
         # SPI init
-        self.spi = pyb.SPI(spi_bus, pyb.SPI.MASTER, baudrate=3200000, polarity=0, phase=1)
+        try:
+            self.spi = pyb.SPI(spi_bus, pyb.SPI.MASTER, baudrate=3200000, polarity=0, phase=1)
+        except:
+            self.spi = pyb.SPI(spi_bus, baudrate=3200000, polarity=0, phase=1)
 
         # turn LEDs off
         self.show([])
+
+    def __len__(self):
+        return self.led_count
+
+    def __setitem__(self,indx,rgb):
+        self._rgblist[indx] = rgb
+
+    def __getitem__(self,indx):
+        return self._rgblist[indx]
+
+    def fill(self,rgb):
+        for i in range(self.led_count):
+            self.__setitem__(i,rgb)
+
+    def write(self):
+        self.show(self._rgblist)
 
     def show(self, data):
         """
@@ -53,6 +74,9 @@ class WS2812:
         are intensities of colors in range from 0 to 255. One RGB tuple for each
         LED. Count of tuples may be less than count of connected LEDs.
         """
+        for i in range(min(len(data),self.led_count)):
+            self.__setitem__(i,data[i])
+
         self.fill_buf(data)
         self.send_buf()
 
@@ -60,7 +84,11 @@ class WS2812:
         """
         Send buffer over SPI.
         """
-        self.spi.send(self.buf)
+        if 'send' in dir(self.spi):
+            self.spi.send(self.buf)
+        else:
+            self.spi.write(self.buf)
+
         gc.collect()
 
     def update_buf(self, data, start=0):
