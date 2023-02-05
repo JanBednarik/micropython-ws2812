@@ -59,6 +59,7 @@ Discussion about this driver: http://forum.micropython.org/viewtopic.php?f=5&t=3
 Changelog
 ---------
 
+* 1.4 - Updates for builtin neopixel compatibility
 * 1.3 - Allow updating only part of the buffer; re-add send_buf
 * 1.2 - Disable IRQ feature removed. (It's not neccesary in newer versions of
   MicroPython.)
