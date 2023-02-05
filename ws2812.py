@@ -24,7 +24,7 @@ class WS2812:
         ]
         chain.show(data)
 
-    Version: 1.1
+    Version: 1.4
     """
     buf_bytes = (0x88, 0x8e, 0xe8, 0xee)
 
